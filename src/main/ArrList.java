@@ -32,6 +32,18 @@ public class ArrList<E> {
      */
     private void resize(int newSize) {
         // TODO resize 함수를 완성하시오.
+        if(newSize < size){
+            for (int i = newSize + 1; i < size; i++){
+                a[i] = null;
+            }
+            size = newSize;
+        } else {
+            E[] t = (E[]) new Object[newSize];
+            for(int i = 0; i < size; i++){
+                t[i] = a[i];
+            }
+            a = t;
+        }
     }
 
     public E deleteLast() {
