@@ -19,6 +19,7 @@ public class MainJava {
         for(int e : inserts) {
             list.insertLast(e);
         }
+//        System.out.println(list.printall());
         for(int e : deletes) {
             list.delete(e);
         }

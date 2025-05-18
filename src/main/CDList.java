@@ -1,5 +1,7 @@
 package main;
 
+import java.util.NoSuchElementException;
+
 public class CDList<E> {
 
     private DNode<E> head;
@@ -28,19 +30,64 @@ public class CDList<E> {
 
     public boolean isEmpty() {
         // TODO CDList가 비어있는지 여부를 반환하시오.
-        return false;
+        return size == 0;
     }
 
     public void insert(int index, E newItem) {
         // TODO head가 0번째 일 때 index번 째에 newItem 값을 삽입하도록 구현하시오.
         // TODO index가 올바르지 않을 때 IndexOutOfBoundsException 예외를 발생시키시오.
+        if(index < 0 || index > size) throw new IndexOutOfBoundsException();
+        DNode<E> newNode = new DNode<>(newItem);
+        if(head == null){
+            head = newNode;
+            head.setNext(head);
+            head.setPrevious(head);
+        } else if(index == 0) {
+            DNode<E> prev = head.getPrevious();
+            newNode.setPrevious(prev);
+            newNode.setNext(head);
+            prev.setNext(newNode);
+            head.setPrevious(newNode);
+            head = newNode;
+        } else {
+            DNode<E> cur = head;
+            for(int i = 0; i < index-1; i++){
+                cur = cur.getNext();
+            }
+            DNode<E> next = cur.getNext();
+            newNode.setPrevious(cur);
+            newNode.setNext(next);
+            cur.setNext(newNode);
+            next.setPrevious(newNode);
+        }
+        size++;
     }
 
     public E delete(int index) {
         // TODO head가 0번째 일 때 index번 째의 노드의 data를 반환하고 삭제하시오.
         // TODO 리스트가 비어있을 때 NoSuchElementException 예외를 발생시키시오.
         // TODO index가 올바르지 않을 때 IndexOutOfBoundsException 예외를 발생시키시오.
-        return null;
+        if(size == 0) throw new NoSuchElementException();
+        if(index < 0 || index >= size) throw new IndexOutOfBoundsException();
+        DNode<E> cur = head;
+        for(int i = 0; i < index; i++){
+            cur = cur.getNext();
+        }
+        if(size == 1){
+            head = null;
+        } else {
+            DNode<E> prev = cur.getPrevious();
+            DNode<E> next = cur.getNext();
+            prev.setNext(next);
+            next.setPrevious(prev);
+            if(cur == head){
+                head = next;
+            }
+        }
+        cur.setPrevious(null);
+        cur.setNext(null);
+        size--;
+        return cur.getData();
     }
 
     public String printall() {
